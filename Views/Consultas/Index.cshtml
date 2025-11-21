@@ -1,0 +1,39 @@
+﻿@model IEnumerable<ConsultamedicaConfort.Models.Consulta>
+
+@{
+    ViewData["Title"] = "Consultas";
+}
+
+<h1>Consultas</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Nova Consulta</a>
+</p>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Data da Consulta</th>
+            <th>Paciente</th>
+            <th>Médico</th>
+            <th>Observações</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.DataConsulta.ToString("dd/MM/yyyy HH:mm")</td>
+                <td>@item.Paciente?.Nome</td>
+                <td>@item.Medico?.Nome</td>
+                <td>@item.Observacoes</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning btn-sm">Editar</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info btn-sm">Detalhes</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">Excluir</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

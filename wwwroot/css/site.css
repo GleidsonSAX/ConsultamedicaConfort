@@ -1,0 +1,70 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+}
+
+.form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
+  color: var(--bs-secondary-color);
+  text-align: end;
+}
+
+.form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
+  text-align: start;
+}
+/* ====== TEMA CONSULTAMEDICA CONFORT ====== */
+body {
+    background-color: #f6faff; /* azul bem claro de fundo */
+}
+
+.navbar, .bg-dark {
+    background: linear-gradient(90deg, #0051ff, #00c853, #7b1fa2);
+    color: white !important;
+}
+
+    .navbar a, .navbar-brand {
+        color: white !important;
+        font-weight: bold;
+    }
+
+.btn-primary {
+    background-color: #0051ff;
+    border-color: #003bbd;
+}
+
+.btn-success {
+    background-color: #00c853;
+    border-color: #009b3b;
+}
+
+.btn-danger {
+    background-color: #b00020;
+}
+
+.table thead {
+    background-color: #7b1fa2;
+    color: white;
+}
+
+h1, h2, h3 {
+    color: #0051ff;
+    font-weight: bold;
+}
+
