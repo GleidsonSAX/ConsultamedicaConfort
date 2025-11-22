@@ -1,8 +1,10 @@
 ﻿using System.Threading.Tasks;
+
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ConsultamedicaConfort.Data;
 using ConsultamedicaConfort.Models;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace ConsultamedicaConfort.Controllers
 {
@@ -40,73 +42,88 @@ namespace ConsultamedicaConfort.Controllers
             return View(paciente);
         }
 
-        // GET: Pacientes/Create
         public IActionResult Create()
         {
+            ViewBag.Medicos = _context.Medicos.ToList();
             return View();
         }
-
-        // POST: Pacientes/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Nome,CPF,DataNascimento,Telefone,Email")] Paciente paciente)
+        public async Task<IActionResult> Create(Paciente paciente, int[] medicosSelecionados)
         {
             if (ModelState.IsValid)
             {
                 _context.Add(paciente);
                 await _context.SaveChangesAsync();
+
+                if (medicosSelecionados != null)
+                {
+                    foreach (var idMedico in medicosSelecionados)
+                    {
+                        _context.PacientesMedicos.Add(new PacienteMedico
+                        {
+                            PacienteId = paciente.Id,
+                            MedicoId = idMedico
+                        });
+                    }
+                    await _context.SaveChangesAsync();
+                }
+
                 return RedirectToAction(nameof(Index));
             }
+
+            ViewBag.Medicos = _context.Medicos.ToList();
             return View(paciente);
         }
 
-        // GET: Pacientes/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
             var paciente = await _context.Pacientes.FindAsync(id);
-            if (paciente == null)
-            {
-                return NotFound();
-            }
+            if (paciente == null) return NotFound();
+
+            ViewBag.Medicos = _context.Medicos.ToList();
+            ViewBag.MedicosSelecionados = _context.PacientesMedicos
+                .Where(pm => pm.PacienteId == id)
+                .Select(pm => pm.MedicoId)
+                .ToList();
+
             return View(paciente);
         }
 
         // POST: Pacientes/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Nome,CPF,DataNascimento,Telefone,Email")] Paciente paciente)
+        public async Task<IActionResult> Edit(Paciente paciente, int[] medicosSelecionados)
         {
-            if (id != paciente.Id)
+            if (!ModelState.IsValid)
             {
-                return NotFound();
+                return View(paciente);
             }
 
-            if (ModelState.IsValid)
+            _context.Update(paciente);
+            await _context.SaveChangesAsync();
+
+            // Remove vínculos antigos
+            var antigos = _context.PacientesMedicos.Where(pm => pm.PacienteId == paciente.Id);
+            _context.PacientesMedicos.RemoveRange(antigos);
+
+            // Adiciona vínculos novos
+            if (medicosSelecionados != null)
             {
-                try
+                foreach (var idMedico in medicosSelecionados)
                 {
-                    _context.Update(paciente);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!PacienteExists(paciente.Id))
+                    _context.PacientesMedicos.Add(new PacienteMedico
                     {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                        PacienteId = paciente.Id,
+                        MedicoId = idMedico
+                    });
                 }
-                return RedirectToAction(nameof(Index));
             }
-            return View(paciente);
+
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: Pacientes/Delete/5

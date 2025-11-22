@@ -4,6 +4,7 @@ using ConsultamedicaConfort.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ConsultamedicaConfort.Migrations
 {
     [DbContext(typeof(ConsultamedicaConfortContext))]
-    partial class ConsultaMedicaConfortContextModelSnapshot : ModelSnapshot
+    [Migration("20251121115817_RelacionamentoPacienteMedico")]
+    partial class RelacionamentoPacienteMedico
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -145,7 +148,7 @@ namespace ConsultamedicaConfort.Migrations
 
             modelBuilder.Entity("ConsultamedicaConfort.Models.PacienteMedico", b =>
                 {
-                    b.HasOne("ConsultamedicaConfort.Models.Medico", "medico")
+                    b.HasOne("ConsultamedicaConfort.Models.Medico", "Medico")
                         .WithMany()
                         .HasForeignKey("MedicoId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -157,9 +160,9 @@ namespace ConsultamedicaConfort.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Paciente");
+                    b.Navigation("Medico");
 
-                    b.Navigation("medico");
+                    b.Navigation("Paciente");
                 });
 #pragma warning restore 612, 618
         }
