@@ -14,9 +14,9 @@ namespace ConsultamedicaConfort.Models
         [Display(Name = "CRM")]
         public string CRM { get; set; } = string.Empty;
 
-        // Abreviações: CARD, ORTO, CLIN, PED, GINE, etc.
-        [Display(Name = "Especialidade (sigla)")]
+        [Display(Name = "Especialidade")]
         public string Especialidade { get; set; } = string.Empty;
+
 
     }
 
